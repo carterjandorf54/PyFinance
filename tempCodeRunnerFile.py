@@ -1,0 +1,1 @@
+(newdf["Amount"], 

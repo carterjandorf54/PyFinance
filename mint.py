@@ -1,5 +1,6 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
 import csv
 
 # Function to read in the CSV File and Create a Pandas DataFrame
@@ -22,11 +23,6 @@ def readCSV(path):
             moneyspent.append(x["Amount"])
             category.append(x["Category"])
             account.append(x["Account Name"])
-
-        # Manipulate the Date field
-        for i in range(len(dateList)):
-            temp = dateList[i].split("/")
-            dateList[i] = f"{temp[2]}-{temp[0]}-{temp[1]}"
 
         # Cast the amount spent to a float
         for i in range(len(moneyspent)):
@@ -59,31 +55,63 @@ def getCategories(df):
     return categories
 
 # Returns the date range from your last to first transaction
-def getDateRange(df):
+def getComplexDateRange(df):
     dateRange = []
     dates = []
 
     for x in df["Date"]:
         dates.append(x)
 
-    temp_first = dates[-1].split("-")
-    first_date = f"{temp_first[0]}-{temp_first[1]}"
-    temp_last = dates[0].split("-")
-    last_date = f"{temp_last[0]}-{temp_last[1]}"
+    temp_first = dates[-1].split("/")
+    first_date = f"{temp_first[2]}-{temp_first[0]}"
+    temp_last = dates[0].split("/")
+    last_date = f"{temp_last[2]}/{temp_last[0]}"
 
     dateRange.append(first_date)
     dateRange.append(last_date)
 
     return dateRange
 
+def getSimpleDateRange(df):
+    dateRange = []
+    dates = []
+
+    for x in df["Date"]:
+        dates.append(x)
+
+    dateRange.append(dates[-1])
+    dateRange.append(dates[0])
+
+    return dateRange
+
     
 df = readCSV("assets\Carter_Finances_6_22_23.csv")
 
-df["Total Spent"] = df["Amount"].cumsum()
+x = getSimpleDateRange(df)
+y = getCategories(df)
 
-x = getDateRange(df)
+newdf = df[df.Category.isin(["Paycheck"])]
+newdf["Total Earned"] = newdf["Amount"].cumsum() 
 
-print(x)
+# Plot Date vs Amount Made
+fig, ax = plt.subplots()
+ax.plot(newdf["Date"], newdf["Total Earned"])
+
+
+# Plot Styling
+ax.set_title("Date vs Amount Made")
+ax.set_xlabel("", fontsize=16)
+fig.autofmt_xdate()
+ax.set_ylabel("Total Amount ($)")
+ax.tick_params(labelsize=8)
+
+plt.show()
+
+'''
+ts = pd.Series(newdf["Amount"], index=newdf["Date"])
+ts.plot()
+plt.show()
+'''
 
 
 
