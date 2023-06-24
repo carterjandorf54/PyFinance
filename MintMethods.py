@@ -8,6 +8,7 @@ class MintMethods():
         self.df = self.readCSV(path)
         self.categories = self.getCategories(self.df)
         self.date_range = self.getSimpleDateRange(self.df)
+        self.filtered = pd.DataFrame()
 
     # Function to read in the CSV File and Create a Pandas DataFrame
     def readCSV(self, path):
@@ -70,8 +71,12 @@ class MintMethods():
         dateRange.append(dates[0])
 
         return dateRange
-        
     
+    # Create a filtered Data Frame Based off category
+    def dataFilter(self, df, category):
+        filtered = df.loc[(df.Category.isin(category))]
+        self.filtered = filtered
+
 
 
         
