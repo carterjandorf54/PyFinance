@@ -17,7 +17,7 @@ for i in range(len(x.categories)):
         print("%2d %-30s" % (i, x.categories[i]))
     else:
         print("%2d %-30s" % (i, x.categories[i]), end="")
-        #print(f"{i}. {x.categories[i]}", end="\t\t")
+        # print(f"{i}. {x.categories[i]}", end="\t\t")
 
 for i in range(0, num_filter):
     temp = int(input(f"\nEnter choice {i+1}: "))
@@ -25,7 +25,18 @@ for i in range(0, num_filter):
 
 x.dataFilter(x.df, filter_list)
 print(x.filtered)
-#print(x.filtered["Amount"].sum())
+
+# Create an empty Text File
+f = open("filteredData.txt", "w")
+
+# Cast the DataFrame to a String and Write to the File
+df_string = x.filtered.to_string(header=False, index=False)
+f.write(df_string)
+
+f.close()
+
+
+# print(x.filtered["Amount"].sum())
 '''
 x = getSimpleDateRange(df)
 y = getCategories(df)
@@ -52,6 +63,3 @@ ts = pd.Series(newdf["Amount"], index=newdf["Date"])
 ts.plot()
 plt.show()
 '''
-
-
-

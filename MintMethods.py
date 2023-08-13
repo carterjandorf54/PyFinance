@@ -1,11 +1,12 @@
 import csv
 import pandas as pd
 
+
 class MintMethods():
 
     # Initialize Mint Methods with an Empty DataFrame
     def __init__(self, path):
-        self.df = self.readCSV(path)
+        self.df = self.readCSV(path)  # Reads the CSV File
         self.categories = self.getCategories(self.df)
         self.date_range = self.getSimpleDateRange(self.df)
         self.filtered = pd.DataFrame()
@@ -33,9 +34,10 @@ class MintMethods():
             # Cast the amount spent to a float
             for i in range(len(moneyspent)):
                 moneyspent[i] = float(moneyspent[i])
-            
+
             # Add the List to a Dictionary
-            transactions = {"Date" : dateList, "Amount" : moneyspent, "Category" : category, "Account" : account}
+            transactions = {"Date": dateList, "Amount": moneyspent,
+                            "Category": category, "Account": account}
 
             # Create the Pandas DataFrame
             df = pd.DataFrame(transactions)
@@ -43,11 +45,11 @@ class MintMethods():
             # Return the Transactions Dictionary and DataFrame
             return df
 
-    # Returns a simple dataframe with all fields from CSV File    
+    # Returns a simple dataframe with all fields from CSV File
     def easyReadCSV(self, path):
         transactions = pd.read_csv(path)
         return transactions
-    
+
     # Returns a list of categories from the CSV File
     def getCategories(self, df):
         categories = []
@@ -57,9 +59,9 @@ class MintMethods():
                 pass
             else:
                 categories.append(x)
-        
+
         return categories
-    
+
     def getSimpleDateRange(self, df):
         dateRange = []
         dates = []
@@ -71,12 +73,8 @@ class MintMethods():
         dateRange.append(dates[0])
 
         return dateRange
-    
+
     # Create a filtered Data Frame Based off category
     def dataFilter(self, df, category):
         filtered = df.loc[(df.Category.isin(category))]
         self.filtered = filtered
-
-
-
-        
